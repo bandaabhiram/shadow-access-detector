@@ -1,0 +1,8 @@
+// Stale Guest Accounts with active RBAC
+ShadowIdentity_CL
+| where userType == "Guest"
+| extend DaysSinceSignIn = datetime_diff("day", now(), todatetime(signInActivity.lastSignInDateTime))
+| where DaysSinceSignIn > 90
+| where hasRbacAssignments == true
+| project identityName, userPrincipalName, DaysSinceSignIn, rbacAssignments, shadowRiskScore
+| order by shadowRiskScore desc

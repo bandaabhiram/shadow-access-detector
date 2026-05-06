@@ -1,0 +1,8 @@
+// Service Principals with no recent authentication
+ShadowIdentity_CL
+| where type == "servicePrincipal"
+| extend DaysSinceAuth = datetime_diff("day", now(), todatetime(signInActivity.lastSignInDateTime))
+| where DaysSinceAuth > 180
+| where assignedRoles contains "Contributor" or assignedRoles contains "Owner"
+| project identityName, appId, DaysSinceAuth, assignedRoles, shadowRiskScore
+| order by shadowRiskScore desc

@@ -1,0 +1,8 @@
+// Managed Identities attached to deleted resources
+ShadowIdentity_CL
+| where type == "managedIdentity"
+| where attachedResourceDeleted == true
+| extend KeyVaultAccess = array_length(keyVaultAccessPolicies)
+| where KeyVaultAccess > 0
+| project identityName, resourceId, KeyVaultAccess, shadowRiskScore
+| order by shadowRiskScore desc

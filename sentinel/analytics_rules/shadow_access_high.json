@@ -1,0 +1,16 @@
+{
+  "name": "Shadow Access Score Critical",
+  "displayName": "Shadow Access Risk Score > 80",
+  "description": "Auto-create incident when an identity's shadow risk score exceeds 80",
+  "severity": "High",
+  "enabled": true,
+  "query": "ShadowIdentity_CL\n| where shadowRiskScore > 80\n| project TimeGenerated, identityName, type, shadowRiskScore, shadowRiskReasons",
+  "queryFrequency": "PT1H",
+  "queryPeriod": "PT2H",
+  "triggerOperator": "GreaterThan",
+  "triggerThreshold": 0,
+  "suppressionDuration": "PT1H",
+  "suppressionEnabled": false,
+  "tactics": ["InitialAccess", "Persistence"],
+  "techniques": ["T1078"]
+}

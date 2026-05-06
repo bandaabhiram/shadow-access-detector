@@ -1,0 +1,7 @@
+// Disabled accounts with valid refresh tokens
+ShadowIdentity_CL
+| where accountEnabled == false
+| extend TokenAgeDays = datetime_diff("day", now(), todatetime(refreshTokensValidFromDateTime))
+| where TokenAgeDays < 90
+| project identityName, userPrincipalName, TokenAgeDays, shadowRiskScore, shadowRiskReasons
+| order by shadowRiskScore desc
